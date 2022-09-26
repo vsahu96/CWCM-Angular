@@ -1,1 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
+
+.projectLogo a {
+    text-decoration: none;
+    color: white;
+}
+
+.flex {
+    display: flex;
+}
+
+.justify-content-beween {
+    justify-content:space-between;
+}
+
+.m-auto {
+    margin: auto;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;   
+}
+
+/* .loginPage {
+    margin-top: 200px;
+    padding: 50px;
+} */
+
+.mat-card {
+    margin-top: 200px;
+    padding: 40px;
+    width: 100%;
+}
