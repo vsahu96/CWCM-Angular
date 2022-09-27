@@ -6,21 +6,32 @@
             <mat-card-subtitle>Enter your email and password to login</mat-card-subtitle>
 
             <mat-card-content>
-                <form class="loginForm" action="">
+                <form class="loginForm" [formGroup]="loginForm" (ngSubmit)="login()">
                     <mat-form-field>
                         <mat-label>Email</mat-label>
-                        <input matInput type="email" required />
+                        <input matInput type="email" formControlName="email"
+                        [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" required />
+                        <div *ngIf="submitted && f['email'].errors"  class="invalid-feedback">
+                            <mat-error *ngIf="f['email'].errors['required']">Email is required</mat-error>
+                            <mat-error *ngIf="f['email']['errors']['email']">Email must be a valid email address
+                            </mat-error>
+                        </div>
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Password</mat-label>
-                        <input matInput type="password" required />
+                        <input matInput type="password" formControlName="password"
+                        [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" required />
+                        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                            <mat-error *ngIf="f['password'].errors['required']">Password is required</mat-error>
+                            <mat-error *ngIf="f['password']['errors']['minlength']">Password must be at least 6 characters</mat-error>
+                        </div>
                     </mat-form-field>
                 </form>
                 <mat-divider></mat-divider>
                 <mat-card-actions>
-                    <button type="submit" *ngIf="!isLoggedIn" (click)="login()" mat-raised-button>Login</button>
+                    <button type="submit" *ngIf="!isShowLoader" (click)="login()" mat-raised-button>Login</button>
                 </mat-card-actions>
-                <mat-progress-bar *ngIf="isLoggedIn" mode="indeterminate"></mat-progress-bar>
+                <mat-progress-bar *ngIf="isShowLoader" mode="indeterminate"></mat-progress-bar>
             </mat-card-content>
         </mat-card>
     </div>

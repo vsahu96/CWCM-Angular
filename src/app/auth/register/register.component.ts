@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MemberService } from '../../services/members/member.service';
 import { MustMatch } from '../../_helpers/must-match.validator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-register',
@@ -16,7 +17,12 @@ export class RegisterComponent implements OnInit {
     submitted : boolean = false;
     isShowLoader: boolean = false;
 
-    constructor(private formBuilder: FormBuilder, private memberService: MemberService) { }
+    constructor(
+        private formBuilder: FormBuilder,
+        private memberService: MemberService,
+        private _snackBar: MatSnackBar,
+        private router: Router
+    ) { }
 
     ngOnInit() {
         this.registerForm = this.formBuilder.group({
@@ -45,9 +51,6 @@ export class RegisterComponent implements OnInit {
             return;
         }
 
-        // display form values on success
-        // alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value, null, 4));
-        // return;
         let userData = {
             'firstName': this.registerForm.value.firstName,
             'surname': this.registerForm.value.lastName,
@@ -62,12 +65,13 @@ export class RegisterComponent implements OnInit {
             res => {
                 this.isShowLoader = false;
                 const response = res.response;
-                console.log(response);
+                this._snackBar.open('User Registered Successfully!', 'OK');
+                this.router.navigate(['login']);
             },
             error => {
                 this.isShowLoader = false;
                 const errorResponse = error.error;
-                alert(errorResponse.response.error.internal_message);
+                this._snackBar.open(errorResponse.response.error.internal_message, 'OK');
             }
         )
     }
