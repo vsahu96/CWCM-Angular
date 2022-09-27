@@ -11,14 +11,14 @@ export class MemberService {
 
   getAppsettings(): Observable<any> {
     const platformId = 11;
-    const url = 'https://wss2.cex.uk.webuy.io/v3/appsettings/prelogin?platformId=' + platformId;
+    const url = 'http://dev-wss2.cex.uk.webuy.ws/v3/appsettings/prelogin?platformId=' + platformId;
     return this.http.get(url);
   }
 
   memberRegistration(userData: any): Observable<any> {
     console.log(userData);
     // return;
-    const url = 'https://wss2.cex.uk.webuy.io/v3/members';
+    const url = 'http://dev-wss2.cex.uk.webuy.ws/v3/members';
     return this.http.post(url, userData);
   }
 }

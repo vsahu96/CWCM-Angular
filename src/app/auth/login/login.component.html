@@ -1,6 +1,6 @@
 <div class="flex">
     <div class="m-auto">
-        <mat-card>
+        <mat-card style="margin-top: 200px; width: 100%; padding: 30px;">
             <mat-card-title>Login Here</mat-card-title>
 
             <mat-card-subtitle>Enter your email and password to login</mat-card-subtitle>
@@ -18,8 +18,9 @@
                 </form>
                 <mat-divider></mat-divider>
                 <mat-card-actions>
-                    <button type="submit" mat-raised-button>Login</button>
+                    <button type="submit" *ngIf="!isLoggedIn" (click)="login()" mat-raised-button>Login</button>
                 </mat-card-actions>
+                <mat-progress-bar *ngIf="isLoggedIn" mode="indeterminate"></mat-progress-bar>
             </mat-card-content>
         </mat-card>
     </div>

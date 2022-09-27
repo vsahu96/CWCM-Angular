@@ -13,7 +13,8 @@ import { MustMatch } from '../../_helpers/must-match.validator';
 export class RegisterComponent implements OnInit {
 
     registerForm!: FormGroup;
-    submitted = false;
+    submitted : boolean = false;
+    isShowLoader: boolean = false;
 
     constructor(private formBuilder: FormBuilder, private memberService: MemberService) { }
 
@@ -22,7 +23,7 @@ export class RegisterComponent implements OnInit {
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
-            contact: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[- +()0-9]+')]],
+            contact: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(15), Validators.pattern('[- +()0-9]+')]],
             password: ['', [Validators.required, Validators.minLength(6)]],
             confirmPassword: ['', Validators.required],
             acceptTerms: [false, Validators.requiredTrue]
@@ -36,9 +37,11 @@ export class RegisterComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
+        this.isShowLoader = true;
 
         // stop here if form is invalid
         if (this.registerForm.invalid) {
+            this.isShowLoader = false;
             return;
         }
 
@@ -53,11 +56,18 @@ export class RegisterComponent implements OnInit {
             'contactNumber': this.registerForm.value.contact,
             'timezone': '',
             'platformId': 11,
+            'acceptAgreement': this.registerForm.value.acceptTerms
         }
         this.memberService.memberRegistration(userData).subscribe(
             res => {
+                this.isShowLoader = false;
                 const response = res.response;
                 console.log(response);
+            },
+            error => {
+                this.isShowLoader = false;
+                const errorResponse = error.error;
+                alert(errorResponse.response.error.internal_message);
             }
         )
     }
