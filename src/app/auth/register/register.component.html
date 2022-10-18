@@ -4,70 +4,99 @@
             <mat-card-title>CeX Registration Form - RabbitMQ Test</mat-card-title>
             <mat-divider></mat-divider>
             <mat-card-content style="margin-top:10%">
-                <form class="registerForm" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-                    <mat-form-field>
-                        <mat-label>First Name</mat-label>
-                        <input matInput type="text"  formControlName="firstName"
-                        [ngClass]="{ 'is-invalid': submitted && f['firstName'].errors }"  required />
-                        <div *ngIf="submitted && f['firstName'].errors" class="invalid-feedback">
-                            <mat-error *ngIf="f['firstName'].errors['required']">First Name is required</mat-error>
-                        </div>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>Last Name</mat-label>
-                        <input matInput type="text"  formControlName="lastName"
-                        [ngClass]="{ 'is-invalid': submitted && f['lastName'].errors }"  required />
-                        <div *ngIf="submitted && f['lastName'].errors" class="invalid-feedback">
-                            <mat-error *ngIf="f['lastName'].errors['required']">Last Name is required</mat-error>
-                        </div>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>Email</mat-label>
-                        <input matInput type="email"  formControlName="email"
-                        [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"  required />
-                        <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
-                            <mat-error *ngIf="f['email'].errors['required']">Email is required</mat-error>
-                            <mat-error *ngIf="f['email']['errors']['email']">Email must be a valid email address</mat-error>
-                        </div>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>Contact</mat-label>
-                        <input matInput type="text"  formControlName="contact"
-                        [ngClass]="{ 'is-invalid': submitted && f['contact'].errors }" maxlength = "15" required />
-                        <div *ngIf="submitted && f['contact'].errors" class="invalid-feedback">
-                            <mat-error *ngIf="f['contact'].errors['required']">Contact number is required</mat-error>
-                            <mat-error *ngIf="f['contact'].hasError('minlength')">Contact number must be 10 digit numeric value</mat-error>
-                            <mat-error *ngIf="f['contact'].hasError('maxlength')">Contact number must be 10 digit numeric value Only</mat-error>
-                            <mat-error *ngIf="f['contact']['errors']['pattern']">Please enter valid contact number</mat-error>
-                        </div>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>Password</mat-label>
-                        <input matInput type="password"  formControlName="password"
-                        [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"  required />
-                        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-                            <mat-error *ngIf="f['password'].errors['required']">Password is required</mat-error>
-                            <mat-error *ngIf="f['password']['errors']['minlength']">Password must be at least 6 characters</mat-error>
-                        </div>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>Confirm Password</mat-label>
-                        <input matInput type="password"  formControlName="confirmPassword"
-                        [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors }"  required />
-                        <div *ngIf="submitted && f['confirmPassword'].errors" class="invalid-feedback">
-                            <mat-error *ngIf="f['confirmPassword'].errors['required']">Confirm Password is required</mat-error>
-                            <mat-error *ngIf="f['confirmPassword']['errors']['mustMatch']">Passwords must match</mat-error>
-                        </div>
-                    </mat-form-field>
-                        <mat-checkbox class="example-margin" formControlName="acceptTerms">By clicking on checkbox, you agree to our <a href="https://webuy.com/site/terms/" target="_blank">Terms and Conditions</a></mat-checkbox>
-                        <mat-error *ngIf="submitted && f['acceptTerms'].errors" class="invalid-feedback">Accept Ts & Cs is required
+                <mat-slide-toggle [(ngModel)]="bulkRegistration">Bulk Registration</mat-slide-toggle>
+                <div *ngIf="!bulkRegistration">
+                    <form class="registerForm" [formGroup]="registerForm"
+                        (ngSubmit)="onSubmit()">
+                        <mat-form-field>
+                            <mat-label>First Name</mat-label>
+                            <input matInput type="text" formControlName="firstName"
+                                [ngClass]="{ 'is-invalid': submitted && f['firstName'].errors }" required />
+                            <div *ngIf="submitted && f['firstName'].errors" class="invalid-feedback">
+                                <mat-error *ngIf="f['firstName'].errors['required']">First Name is required</mat-error>
+                            </div>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Last Name</mat-label>
+                            <input matInput type="text" formControlName="lastName"
+                                [ngClass]="{ 'is-invalid': submitted && f['lastName'].errors }" required />
+                            <div *ngIf="submitted && f['lastName'].errors" class="invalid-feedback">
+                                <mat-error *ngIf="f['lastName'].errors['required']">Last Name is required</mat-error>
+                            </div>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Email</mat-label>
+                            <input matInput type="email" formControlName="email"
+                                [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" required />
+                            <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                                <mat-error *ngIf="f['email'].errors['required']">Email is required</mat-error>
+                                <mat-error *ngIf="f['email']['errors']['email']">Email must be a valid email address
+                                </mat-error>
+                            </div>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Contact</mat-label>
+                            <input matInput type="text" formControlName="contact"
+                                [ngClass]="{ 'is-invalid': submitted && f['contact'].errors }" maxlength="15"
+                                required />
+                            <div *ngIf="submitted && f['contact'].errors" class="invalid-feedback">
+                                <mat-error *ngIf="f['contact'].errors['required']">Contact number is required
+                                </mat-error>
+                                <mat-error *ngIf="f['contact'].hasError('minlength')">Contact number must be 10 digit
+                                    numeric value</mat-error>
+                                <mat-error *ngIf="f['contact'].hasError('maxlength')">Contact number must be 10 digit
+                                    numeric value Only</mat-error>
+                                <mat-error *ngIf="f['contact']['errors']['pattern']">Please enter valid contact number
+                                </mat-error>
+                            </div>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Password</mat-label>
+                            <input matInput type="password" formControlName="password"
+                                [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" required />
+                            <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                                <mat-error *ngIf="f['password'].errors['required']">Password is required</mat-error>
+                                <mat-error *ngIf="f['password']['errors']['minlength']">Password must be at least 6
+                                    characters</mat-error>
+                            </div>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Confirm Password</mat-label>
+                            <input matInput type="password" formControlName="confirmPassword"
+                                [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors }" required />
+                            <div *ngIf="submitted && f['confirmPassword'].errors" class="invalid-feedback">
+                                <mat-error *ngIf="f['confirmPassword'].errors['required']">Confirm Password is required
+                                </mat-error>
+                                <mat-error *ngIf="f['confirmPassword']['errors']['mustMatch']">Passwords must match
+                                </mat-error>
+                            </div>
+                        </mat-form-field>
+                        <mat-checkbox class="example-margin" formControlName="acceptTerms">By clicking on checkbox, you
+                            agree to our <a href="https://webuy.com/site/terms/" target="_blank">Terms and
+                                Conditions</a>
+                        </mat-checkbox>
+                        <mat-error *ngIf="submitted && f['acceptTerms'].errors" class="invalid-feedback">Accept Ts & Cs
+                            is
+                            required
                         </mat-error>
-                    <mat-divider></mat-divider>
-                <mat-card-actions  style="margin-top:5%">
-                    <button mat-raised-button  *ngIf="!isShowLoader" color="warn" type="reset" (click)="onReset()">Cancel</button>
-                    <button mat-raised-button *ngIf="!isShowLoader" color="primary">Register</button>
-                </mat-card-actions>
-                </form>
+                        <mat-divider></mat-divider>
+                        <mat-card-actions style="margin-top:5%">
+                            <button mat-raised-button *ngIf="!isShowLoader" color="warn" type="reset"
+                                (click)="onReset()">Cancel</button>
+                            <button mat-raised-button *ngIf="!isShowLoader" color="primary">Register</button>
+                        </mat-card-actions>
+                    </form>
+                </div>
+                <div class="fileUploadDiv" *ngIf="bulkRegistration">
+                    <mat-toolbar>
+                        <!-- <input matInput /> -->
+                        <input type="file" id="fileInput" name="fileInput" accept=".csv" />
+                        <button mat-flat-button color="primary">
+                            Upload
+                        </button>
+                    </mat-toolbar>
+                    <!-- <input type="file" id="fileInput" name="fileInput" /> -->
+                </div>
             </mat-card-content>
             <mat-progress-bar *ngIf="isShowLoader" mode="indeterminate"></mat-progress-bar>
         </mat-card>

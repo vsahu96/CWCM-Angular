@@ -1,5 +1,17 @@
-
 .registerForm {
     display: flex;
-    flex-direction: column;   
+    flex-direction: column;
+    padding-top: 5%;
+}
+
+
+#fileInput {
+    cursor: pointer;
+    z-index: 10;
+    opacity: 1;
+    height: 60%;
+}
+
+.fileUploadDiv {
+    padding-top: 5%;
 }

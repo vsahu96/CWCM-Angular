@@ -14,14 +14,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class RegisterComponent implements OnInit {
 
     registerForm!: FormGroup;
-    submitted : boolean = false;
+    submitted: boolean = false;
     isShowLoader: boolean = false;
+    bulkRegistration: boolean = false;
+
+    currentFile?: File;
+    fileName = 'Select File';
+
 
     constructor(
         private formBuilder: FormBuilder,
         private memberService: MemberService,
         private _snackBar: MatSnackBar,
-        private router: Router
+        private router: Router,
     ) { }
 
     ngOnInit() {
@@ -65,13 +70,19 @@ export class RegisterComponent implements OnInit {
             res => {
                 this.isShowLoader = false;
                 const response = res.response;
-                this._snackBar.open('User Registered Successfully!', 'OK');
+                this._snackBar.open('User Registered Successfully!, You will receive verification email shortly.', 'OK', {
+                    duration: 5000,
+                    panelClass: ['blue-snackbar', 'my-custom-snackbar']
+                });
                 this.router.navigate(['login']);
             },
             error => {
                 this.isShowLoader = false;
                 const errorResponse = error.error;
-                this._snackBar.open(errorResponse.response.error.internal_message, 'OK');
+                this._snackBar.open(errorResponse.response.error.internal_message, 'OK', {
+                    duration: 5000,
+                    panelClass: ['red-snackbar', 'my-custom-snackbar']
+                });
             }
         )
     }
@@ -80,5 +91,18 @@ export class RegisterComponent implements OnInit {
         this.submitted = false;
         this.registerForm.reset();
     }
+
+
+    /** File Upload Code */
+
+    // selectFile(event: any): void {
+    //     if (event.target.files && event.target.files[0]) {
+    //         const file: File = event.target.files[0];
+    //         this.currentFile = file;
+    //         this.fileName = this.currentFile.name;
+    //     } else {
+    //         this.fileName = 'Select File';
+    //     }
+    // }
 
 }
