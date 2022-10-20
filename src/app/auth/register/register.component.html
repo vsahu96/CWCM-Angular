@@ -4,10 +4,9 @@
             <mat-card-title>CeX Registration Form - RabbitMQ Test</mat-card-title>
             <mat-divider></mat-divider>
             <mat-card-content style="margin-top:10%">
-                <mat-slide-toggle [(ngModel)]="bulkRegistration">Bulk Registration</mat-slide-toggle>
+                <mat-slide-toggle class="mat-slide-toggle" [(ngModel)]="bulkRegistration">Bulk Registration</mat-slide-toggle>
                 <div *ngIf="!bulkRegistration">
-                    <form class="registerForm" [formGroup]="registerForm"
-                        (ngSubmit)="onSubmit()">
+                    <form class="registerForm" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                         <mat-form-field>
                             <mat-label>First Name</mat-label>
                             <input matInput type="text" formControlName="firstName"
@@ -87,15 +86,19 @@
                         </mat-card-actions>
                     </form>
                 </div>
-                <div class="fileUploadDiv" *ngIf="bulkRegistration">
+                <div class="fileUploadDiv" [hidden] = "!bulkRegistration">
                     <mat-toolbar>
-                        <!-- <input matInput /> -->
-                        <input type="file" id="fileInput" name="fileInput" accept=".csv" />
-                        <button mat-flat-button color="primary">
-                            Upload
-                        </button>
+                        <form [formGroup]="bulkRegisterationFrom" (ngSubmit)="onSubmitBulkRegistrationForm()">
+                            <input type="file" id="fileInput" name="fileInput" (change)="selectFile($event)" accept=".csv" required/>
+                            
+                            <button mat-flat-button color="primary">
+                                Upload
+                            </button>
+                            <!-- <div class="invalid-feedback" *ngIf="bulkRegistrationSubmitted && !isBulkRegistrationFormValid"> -->
+                                <mat-error *ngIf="bulkRegistrationSubmitted && !isBulkRegistrationFormValid">Please choose file</mat-error>
+                            <!-- </div> -->
+                        </form>
                     </mat-toolbar>
-                    <!-- <input type="file" id="fileInput" name="fileInput" /> -->
                 </div>
             </mat-card-content>
             <mat-progress-bar *ngIf="isShowLoader" mode="indeterminate"></mat-progress-bar>

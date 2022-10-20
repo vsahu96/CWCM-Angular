@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MemberService } from '../../services/members/member.service';
 import { MustMatch } from '../../_helpers/must-match.validator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-register',
@@ -14,13 +15,17 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class RegisterComponent implements OnInit {
 
     registerForm!: FormGroup;
+    bulkRegisterationFrom!: FormGroup;
     submitted: boolean = false;
     isShowLoader: boolean = false;
     bulkRegistration: boolean = false;
+    isBulkRegistrationFormValid: boolean = false;
+    bulkRegistrationSubmitted: boolean = false;
 
     currentFile?: File;
-    fileName = 'Select File';
-
+    progress = 0;
+    message = '';
+    membersFile: any;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -40,6 +45,10 @@ export class RegisterComponent implements OnInit {
             acceptTerms: [false, Validators.requiredTrue]
         }, {
             validator: MustMatch('password', 'confirmPassword')
+        });
+
+        this.bulkRegisterationFrom = this.formBuilder.group({
+            fileInput: ['', Validators.required],
         });
     }
 
@@ -72,7 +81,6 @@ export class RegisterComponent implements OnInit {
                 const response = res.response;
                 this._snackBar.open('User Registered Successfully!, You will receive verification email shortly.', 'OK', {
                     duration: 5000,
-                    panelClass: ['blue-snackbar', 'my-custom-snackbar']
                 });
                 this.router.navigate(['login']);
             },
@@ -81,7 +89,6 @@ export class RegisterComponent implements OnInit {
                 const errorResponse = error.error;
                 this._snackBar.open(errorResponse.response.error.internal_message, 'OK', {
                     duration: 5000,
-                    panelClass: ['red-snackbar', 'my-custom-snackbar']
                 });
             }
         )
@@ -95,14 +102,33 @@ export class RegisterComponent implements OnInit {
 
     /** File Upload Code */
 
-    // selectFile(event: any): void {
-    //     if (event.target.files && event.target.files[0]) {
-    //         const file: File = event.target.files[0];
-    //         this.currentFile = file;
-    //         this.fileName = this.currentFile.name;
-    //     } else {
-    //         this.fileName = 'Select File';
-    //     }
-    // }
+    selectFile(event: any): void {
+        if (event.target.files && event.target.files[0]) {
+            const file: File = event.target.files[0];
+            this.currentFile = file;
+        }
+    }
+
+    onSubmitBulkRegistrationForm() {
+        this.bulkRegistrationSubmitted = true;
+        if (this.currentFile) {
+            this.isBulkRegistrationFormValid = true;
+            this.memberService.memberBulkRegistration(this.currentFile).subscribe(
+                (event: any) => {
+                    if (event.type === HttpEventType.UploadProgress) {
+                        this.progress = Math.round(100 * event.loaded / event.total);
+                    } else if (event instanceof HttpResponse) {
+                        this.message = event.body.message;
+                    }
+                },
+                (err: any) => {
+                    console.log(err);
+                    this.progress = 0;
+                    this.currentFile = undefined;
+                });
+        } else {
+            this.isBulkRegistrationFormValid = false;
+        }
+    }
 
 }
