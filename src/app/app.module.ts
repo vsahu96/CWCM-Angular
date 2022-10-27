@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialDesignModule } from './material-design/material-design.module';
 import { HomeComponent } from './home/home.component';
 import { BulkRegistrationComponent } from './auth/bulk-registration/bulk-registration.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { BulkRegistrationComponent } from './auth/bulk-registration/bulk-registr
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MaterialDesignModule,
-    FormsModule
+    FormsModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
