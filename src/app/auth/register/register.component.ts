@@ -111,23 +111,44 @@ export class RegisterComponent implements OnInit {
 
     onSubmitBulkRegistrationForm() {
         this.bulkRegistrationSubmitted = true;
+        this.isShowLoader = true;
         if (this.currentFile) {
             this.isBulkRegistrationFormValid = true;
             this.memberService.memberBulkRegistration(this.currentFile).subscribe(
                 (event: any) => {
+                    this.isShowLoader = false;
                     if (event.type === HttpEventType.UploadProgress) {
                         this.progress = Math.round(100 * event.loaded / event.total);
                     } else if (event instanceof HttpResponse) {
                         this.message = event.body.message;
+                        this._snackBar.open('User Registered Successfully!', 'OK', {
+                            duration: 5000,
+                        });
                     }
                 },
-                (err: any) => {
-                    console.log(err);
+                (resp: any) => {
+                    this.isShowLoader = false;
+                    console.log(resp);
                     this.progress = 0;
                     this.currentFile = undefined;
+                    // if(resp.response.moreInfo.ack == 'Success') {
+                    //     this._snackBar.open(errorResponse.response.error.internal_message, 'OK', {
+                    //         duration: 5000,
+                    //     });
+                    // } else {
+                    //     this._snackBar.open(errorResponse.response.error.internal_message, 'OK', {
+                    //         duration: 5000,
+                    //     });
+                    // }
+                    if (typeof(resp.response) != 'undefined') {
+                        this._snackBar.open('Success: ' + resp.response.error.moreInfo.data.successDataCount + ' , Failure: ' + resp.response.error.moreInfo.data.errorDataCount, 'OK', {
+                            duration: 5000,
+                        });
+                    }
                 });
         } else {
             this.isBulkRegistrationFormValid = false;
+            this.isShowLoader = false;
         }
     }
 

@@ -18,7 +18,7 @@ export class MemberService {
   }
 
   memberRegistration(userData: any): Observable<any> {
-    const url = this.wssApiBaseUrl + 'v3/members';
+    const url = this.wssApiBaseUrl + 'v3/rabbitmq';
     return this.http.post(url, userData);
   }
 
@@ -26,7 +26,7 @@ export class MemberService {
 
     const formData: FormData = new FormData();
 
-    formData.append('registerFile', file, file.name);
+    formData.append('BulkMemberRegister', file, file.name);
 
     let headers = {
       'Content-Type': 'multipart/form-data',
@@ -36,7 +36,7 @@ export class MemberService {
       'reportProgress': true
     };
 
-    const url = this.wssApiBaseUrl + 'v3/members';
+    const url = this.wssApiBaseUrl + 'v3/rabbitmq';
 
     return this.http.post(url, formData, headers);
   }
