@@ -131,15 +131,6 @@ export class RegisterComponent implements OnInit {
                     console.log(resp);
                     this.progress = 0;
                     this.currentFile = undefined;
-                    // if(resp.response.moreInfo.ack == 'Success') {
-                    //     this._snackBar.open(errorResponse.response.error.internal_message, 'OK', {
-                    //         duration: 5000,
-                    //     });
-                    // } else {
-                    //     this._snackBar.open(errorResponse.response.error.internal_message, 'OK', {
-                    //         duration: 5000,
-                    //     });
-                    // }
                     if (typeof(resp.response) != 'undefined') {
                         this._snackBar.open('Success: ' + resp.response.error.moreInfo.data.successDataCount + ' , Failure: ' + resp.response.error.moreInfo.data.errorDataCount, 'OK', {
                             duration: 5000,

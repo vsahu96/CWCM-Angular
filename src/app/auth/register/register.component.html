@@ -4,7 +4,8 @@
             <mat-card-title>CeX Registration Form - RabbitMQ Test</mat-card-title>
             <mat-divider></mat-divider>
             <mat-card-content style="margin-top:10%">
-                <mat-slide-toggle class="mat-slide-toggle" [(ngModel)]="bulkRegistration">Bulk Registration</mat-slide-toggle>
+                <mat-slide-toggle class="mat-slide-toggle" [(ngModel)]="bulkRegistration">Bulk Registration
+                </mat-slide-toggle>
                 <div *ngIf="!bulkRegistration">
                     <form class="registerForm" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                         <mat-form-field>
@@ -86,21 +87,23 @@
                         </mat-card-actions>
                     </form>
                 </div>
-                <div class="fileUploadDiv" [hidden] = "!bulkRegistration">
+                <div class="fileUploadDiv" [hidden]="!bulkRegistration">
                     <mat-toolbar>
                         <form [formGroup]="bulkRegisterationFrom" (ngSubmit)="onSubmitBulkRegistrationForm()">
-                            <input type="file" id="fileInput" name="fileInput" (change)="selectFile($event)" accept=".csv" required/>
-                            
+                            <input type="file" id="fileInput" name="fileInput" (change)="selectFile($event)"
+                                accept=".csv" required />
                             <button mat-flat-button color="primary">
                                 Upload
                             </button>
-                            <!-- <div class="invalid-feedback" *ngIf="bulkRegistrationSubmitted && !isBulkRegistrationFormValid"> -->
-                                <mat-error *ngIf="bulkRegistrationSubmitted && !isBulkRegistrationFormValid">Please choose file</mat-error>
-                            <!-- </div> -->
+                            <mat-error *ngIf="bulkRegistrationSubmitted && !isBulkRegistrationFormValid">Please choose
+                                file</mat-error>
                         </form>
                     </mat-toolbar>
                 </div>
             </mat-card-content>
+            <div *ngIf="progress > 0">
+                <div align="center">{{progress}}%</div>
+            </div>
             <mat-progress-bar *ngIf="isShowLoader" mode="indeterminate"></mat-progress-bar>
         </mat-card>
     </div>
